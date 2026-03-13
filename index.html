@@ -85,6 +85,15 @@ html, body {
 }
 .video-panel iframe { width: 100%; height: 100%; min-height: 200px; border: none; display: block; }
 
+.video-panel { position: relative; }
+/* Transparent layer captures touch start so iframe doesn't steal swipes */
+.vid-touch-guard {
+  position: absolute; inset: 0; z-index: 10;
+  background: transparent;
+  display: none;
+}
+.video-panel.open .vid-touch-guard { display: block; }
+
 /* ── CARDS ── */
 .cards-section { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
 
@@ -102,12 +111,13 @@ html, body {
   position: absolute; inset: 0;
   display: flex; align-items: center; justify-content: center;
   padding: 10px 14px;
-  opacity: 0; transform: translateY(24px);
-  transition: opacity 0.28s ease, transform 0.28s ease;
+  opacity: 0; transform: translateX(40px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
   pointer-events: none;
 }
-.cw.active { opacity: 1; transform: translateY(0); pointer-events: all; }
-.cw.out    { opacity: 0; transform: translateY(-24px); }
+.cw.active { opacity: 1; transform: translateX(0); pointer-events: all; }
+.cw.out    { opacity: 0; transform: translateX(-40px); }
+.cw.out.back { transform: translateX(40px); }
 
 .card {
   background: var(--dark); border: 1px solid var(--border); border-radius: 10px;
@@ -246,6 +256,7 @@ html, body {
 
     <!-- Video panel — collapsed on mobile, always visible desktop -->
     <div class="video-panel" id="videoPanel">
+      <div class="vid-touch-guard" id="touchGuard"></div>
       <iframe id="ytFrame"
         src="https://www.youtube.com/embed/qGpyXCopCYg?rel=0&modestbranding=1"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -444,15 +455,25 @@ function build(){
   ui();
 }
 
-function go(d){goTo(cur+d);}
-function goTo(idx){
+function go(d){goTo(cur+d,d);}
+function goTo(idx,d){
+  d=d||1;
   if(anim||idx<0||idx>=DATA.length||idx===cur)return;
   anim=true;
-  document.getElementById('cw'+cur).classList.add('out');
+  const outEl=document.getElementById('cw'+cur);
+  outEl.classList.add('out');
+  if(d<0) outEl.classList.add('back');
   setTimeout(()=>{
-    document.getElementById('cw'+cur).classList.remove('active','out');
+    outEl.classList.remove('active','out','back');
     cur=idx;
-    document.getElementById('cw'+cur).classList.add('active');
+    const inEl=document.getElementById('cw'+cur);
+    inEl.style.transform=d>0?'translateX(40px)':'translateX(-40px)';
+    inEl.style.opacity='0';
+    inEl.classList.add('active');
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      inEl.style.transform='';
+      inEl.style.opacity='';
+    }));
     ui(); anim=false;
   },265);
 }
@@ -476,7 +497,23 @@ function openX(type,term,txt){
 function closeX(){document.getElementById('ov').classList.remove('open');}
 function maybeX(e){if(e.target===document.getElementById('ov'))closeX();}
 
-let tx=0,ty=0;
+let tx=0,ty=0,tdir=1;
+
+// Touch guard on video iframe — tap = play, swipe = navigate cards
+const guard = document.getElementById('touchGuard');
+guard.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:true});
+guard.addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-tx, dy=e.changedTouches[0].clientY-ty;
+  if(Math.abs(dx)<10&&Math.abs(dy)<10){
+    // Tap — hide guard briefly so click passes to iframe
+    guard.style.display='none';
+    setTimeout(()=>guard.style.display='',300);
+  } else if(Math.abs(dx)>Math.abs(dy)&&Math.abs(dx)>40){
+    go(dx<0?1:-1);
+  }
+},{passive:true});
+
+// Swipe on cards
 document.getElementById('vp').addEventListener('touchstart',e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:true});
 document.getElementById('vp').addEventListener('touchend',e=>{
   const dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;
