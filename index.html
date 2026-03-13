@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Free Iran — FARZAD.FM</title>
 
-<!-- OG / Twitter Card meta -->
 <meta property="og:type"        content="website">
 <meta property="og:title"       content="Free Iran — What It Means for the World">
 <meta property="og:description" content="47 years of dictatorship ended Feb 28, 2026. Swipe through 10 key insights from Farzad's breakdown — video plays in sync.">
@@ -23,115 +22,81 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --black:   #000000;
-  --dark:    #0c0c0c;
-  --dark2:   #141414;
-  --border:  #1f1f1f;
-  --border2: #2e2e2e;
-  --red:     #e8281a;
-  --red-dim: rgba(232,40,26,0.10);
-  --red-bdr: rgba(232,40,26,0.30);
-  --white:   #ffffff;
-  --grey:    #888888;
-  --grey2:   #555555;
-  --blue:    #4db8ff;
+  --black:  #000;
+  --dark:   #0c0c0c;
+  --dark2:  #141414;
+  --border: #1f1f1f;
+  --bdr2:   #2e2e2e;
+  --red:    #e8281a;
+  --rdim:   rgba(232,40,26,0.10);
+  --rbdr:   rgba(232,40,26,0.30);
+  --white:  #fff;
+  --grey:   #888;
+  --grey2:  #555;
+  --blue:   #4db8ff;
 }
 
 html, body {
-  height: 100%;
-  background: var(--black);
-  color: var(--white);
-  font-family: 'Inter', sans-serif;
-  overflow: hidden;
-  -webkit-font-smoothing: antialiased;
+  height: 100%; background: var(--black);
+  color: var(--white); font-family: 'Inter', sans-serif;
+  overflow: hidden; -webkit-font-smoothing: antialiased;
 }
 
-/* ━━━ LAYOUT ━━━
-   Mobile:  header → video → cards → nav  (vertical stack)
-   Desktop: header → [video LEFT | cards RIGHT]  (side by side)
-*/
+.app { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
 
-.app {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  overflow: hidden;
-}
-
-/* ━━━ HEADER ━━━ */
-.hdr {
-  flex-shrink: 0;
-  background: var(--black);
-  border-bottom: 1px solid var(--border);
-  z-index: 100;
-}
-.hdr-top {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 16px; height: 46px;
-}
+/* ── HEADER ── */
+.hdr { flex-shrink: 0; background: var(--black); border-bottom: 1px solid var(--border); z-index: 100; }
+.hdr-top { display: flex; align-items: center; justify-content: space-between; padding: 0 14px; height: 46px; }
 .logo-wrap { display: flex; align-items: center; }
-.logo-f { font-size: 19px; font-weight: 900; letter-spacing: -0.03em; color: var(--white); line-height: 1; }
-.logo-dot { display: inline-block; width: 5px; height: 5px; background: var(--red); border-radius: 50%; margin: 0 1px 5px 1px; }
+.logo-f { font-size: 18px; font-weight: 900; letter-spacing: -0.03em; }
+.logo-dot { width: 5px; height: 5px; background: var(--red); border-radius: 50%; margin: 0 1px 4px; display: inline-block; }
 .logo-fm { font-size: 10px; font-weight: 800; letter-spacing: 0.08em; color: var(--grey2); text-transform: uppercase; align-self: flex-end; margin-bottom: 1px; margin-left: 2px; }
-.hdr-right { display: flex; align-items: center; gap: 8px; }
-.tag { font-size: 9px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--grey2); border: 1px solid var(--border2); padding: 3px 7px; border-radius: 2px; }
+.hdr-right { display: flex; align-items: center; gap: 6px; }
+.tag { font-size: 9px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--grey2); border: 1px solid var(--bdr2); padding: 3px 7px; border-radius: 2px; }
+
+/* video toggle button — mobile only */
+.vid-toggle {
+  display: flex; align-items: center; gap: 5px;
+  background: none; border: 1px solid var(--bdr2); border-radius: 2px;
+  padding: 4px 9px; font-size: 9px; font-weight: 800;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--grey); cursor: pointer; transition: all 0.2s;
+}
+.vid-toggle:hover { border-color: var(--red); color: var(--red); }
+.vid-toggle.active { background: var(--red); border-color: var(--red); color: var(--white); }
+
 .prog-rail { height: 2px; background: var(--border); }
 .prog-bar  { height: 100%; background: var(--red); transition: width 0.4s ease; }
 
-/* ━━━ MAIN BODY (below header) ━━━ */
-.main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  min-height: 0;
-}
+/* ── MAIN ── */
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
 
-/* ━━━ VIDEO PANEL ━━━ */
+/* ── VIDEO PANEL ── */
 .video-panel {
-  flex-shrink: 0;
-  background: #000;
+  flex-shrink: 0; background: #000;
   border-bottom: 1px solid var(--border);
-  position: relative;
-}
-
-/* Mobile: 16:9 ratio */
-.video-panel {
-  width: 100%;
-  aspect-ratio: 16/9;
-  max-height: 35vh; /* don't let video eat too much on small phones */
-}
-
-.video-panel iframe {
-  width: 100%; height: 100%;
-  border: none; display: block;
-}
-
-
-/* ━━━ CARDS SECTION ━━━ */
-.cards-section {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
   overflow: hidden;
-  min-height: 0;
+  /* Mobile: collapsed by default */
+  max-height: 0;
+  transition: max-height 0.35s ease;
 }
+.video-panel.open {
+  max-height: 35vh; /* opens to ~35% screen on mobile */
+}
+.video-panel iframe { width: 100%; height: 100%; min-height: 200px; border: none; display: block; }
+
+/* ── CARDS ── */
+.cards-section { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
 
 .counter {
   flex-shrink: 0;
   display: flex; justify-content: space-between; align-items: center;
-  padding: 4px 16px; border-bottom: 1px solid var(--border);
+  padding: 4px 14px; border-bottom: 1px solid var(--border);
   font-size: 9px; font-weight: 800; letter-spacing: 0.14em;
   text-transform: uppercase; color: var(--grey2);
 }
 
-/* Card viewport */
-.vp {
-  flex: 1;
-  position: relative;
-  overflow: hidden;
-  min-height: 0;
-}
+.vp { flex: 1; position: relative; overflow: hidden; min-height: 0; }
 
 .cw {
   position: absolute; inset: 0;
@@ -145,172 +110,119 @@ html, body {
 .cw.out    { opacity: 0; transform: translateY(-24px); }
 
 .card {
-  background: var(--dark);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  width: 100%; max-width: 600px;
-  max-height: 100%; overflow-y: auto;
-  padding: 16px 16px 14px;
+  background: var(--dark); border: 1px solid var(--border); border-radius: 10px;
+  width: 100%; max-width: 560px; max-height: 100%; overflow-y: auto;
+  padding: 16px 15px 14px;
   display: flex; flex-direction: column; gap: 11px;
   position: relative;
 }
 .card::after {
-  content: '';
-  position: absolute;
+  content: ''; position: absolute;
   top: 14px; bottom: 14px; left: -1px;
-  width: 3px; background: var(--red);
-  border-radius: 0 2px 2px 0;
+  width: 3px; background: var(--red); border-radius: 0 2px 2px 0;
 }
 
-.card-eye {
-  display: flex; align-items: center; gap: 6px;
-  font-size: 9px; font-weight: 800;
-  letter-spacing: 0.14em; text-transform: uppercase;
-}
+.card-eye { display: flex; align-items: center; gap: 6px; font-size: 9px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; }
 .eye-n { color: var(--red); }
-.eye-sep { color: var(--border2); }
+.eye-sep { color: var(--bdr2); }
 .eye-topic { color: var(--grey2); }
 
-.card-hl {
-  font-size: clamp(15px, 4.2vw, 21px);
-  font-weight: 900; line-height: 1.15;
-  letter-spacing: -0.02em; color: var(--white);
-}
+.card-hl { font-size: clamp(16px, 4.8vw, 22px); font-weight: 900; line-height: 1.15; letter-spacing: -0.02em; }
 .card-hl em { font-style: normal; color: var(--red); }
 
-.card-body {
-  font-size: 12.5px; line-height: 1.68;
-  color: var(--grey); font-weight: 400;
-}
+.card-body { font-size: 13px; line-height: 1.68; color: var(--grey); }
 
-/* Timestamp — seeks video, stays on page */
+/* Jump button — opens video + seeks */
 .ts-btn {
   display: inline-flex; align-items: center; gap: 6px;
-  font-size: 9px; font-weight: 800; letter-spacing: 0.1em;
-  text-transform: uppercase; color: var(--grey2);
-  border: 1px solid var(--border2); border-radius: 2px;
-  padding: 5px 10px; width: fit-content;
-  cursor: pointer; background: transparent;
+  font-size: 9px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--grey2); border: 1px solid var(--bdr2); border-radius: 2px;
+  padding: 5px 10px; width: fit-content; cursor: pointer; background: transparent;
   transition: border-color 0.2s, color 0.2s;
 }
 .ts-btn:hover { border-color: var(--red); color: var(--red); }
 .ts-pip { color: var(--red); font-size: 6px; }
 
-.ts-hint {
-  font-size: 9px; color: var(--grey2);
-  letter-spacing: 0.04em; margin-top: -4px;
-}
-
 /* i-buttons */
 .irow { display: flex; flex-wrap: wrap; gap: 5px; }
 .ibtn {
   display: inline-flex; align-items: center; gap: 5px;
-  border: 1px solid var(--border2); border-radius: 2px;
+  border: 1px solid var(--bdr2); border-radius: 2px;
   padding: 4px 9px; font-size: 9px; font-weight: 800;
   letter-spacing: 0.07em; text-transform: uppercase;
-  cursor: pointer; background: transparent;
-  color: var(--grey); transition: all 0.18s; user-select: none;
+  cursor: pointer; background: transparent; color: var(--grey);
+  transition: all 0.18s; user-select: none;
 }
-.ibadge {
-  width: 12px; height: 12px; border-radius: 1px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 7px; font-weight: 900; flex-shrink: 0;
-}
-.ibtn.definition   { color: #f0f0f0; border-color: rgba(255,255,255,0.15); }
-.ibtn.definition   .ibadge { background: var(--white); color: #000; }
-.ibtn.definition:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.3); }
-.ibtn.context { color: var(--blue); border-color: rgba(77,184,255,0.2); }
-.ibtn.context .ibadge { background: var(--blue); color: #000; }
-.ibtn.context:hover { background: rgba(77,184,255,0.07); }
-.ibtn.why-it-matters { color: var(--red); border-color: var(--red-bdr); }
-.ibtn.why-it-matters .ibadge { background: var(--red); color: #fff; }
-.ibtn.why-it-matters:hover { background: var(--red-dim); }
+.ibadge { width: 12px; height: 12px; border-radius: 1px; display: flex; align-items: center; justify-content: center; font-size: 7px; font-weight: 900; flex-shrink: 0; }
+.ibtn.definition        { color: #f0f0f0; border-color: rgba(255,255,255,0.15); }
+.ibtn.definition        .ibadge { background: var(--white); color: #000; }
+.ibtn.definition:hover  { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.3); }
+.ibtn.context           { color: var(--blue); border-color: rgba(77,184,255,0.2); }
+.ibtn.context           .ibadge { background: var(--blue); color: #000; }
+.ibtn.context:hover     { background: rgba(77,184,255,0.07); }
+.ibtn.why-it-matters    { color: var(--red); border-color: var(--rbdr); }
+.ibtn.why-it-matters    .ibadge { background: var(--red); color: #fff; }
+.ibtn.why-it-matters:hover { background: var(--rdim); }
 
-/* ━━━ BOTTOM NAV ━━━ */
+/* ── BOTTOM NAV ── */
 .bnav {
-  flex-shrink: 0;
-  height: 50px; background: var(--black);
+  flex-shrink: 0; height: 50px; background: var(--black);
   border-top: 1px solid var(--border);
-  display: flex; align-items: center;
-  justify-content: space-between; padding: 0 14px;
+  display: flex; align-items: center; justify-content: space-between; padding: 0 14px;
 }
 .nbtn {
-  background: none; border: 1px solid var(--border2); border-radius: 2px;
-  padding: 6px 13px; font-size: 9px; font-weight: 800;
-  letter-spacing: 0.1em; color: var(--grey);
-  cursor: pointer; text-transform: uppercase;
+  background: none; border: 1px solid var(--bdr2); border-radius: 2px;
+  padding: 6px 13px; font-size: 9px; font-weight: 800; letter-spacing: 0.1em;
+  color: var(--grey); cursor: pointer; text-transform: uppercase;
   transition: all 0.18s; display: flex; align-items: center; gap: 4px;
 }
 .nbtn:hover:not(:disabled) { border-color: var(--white); color: var(--white); }
 .nbtn:disabled { opacity: 0.18; cursor: not-allowed; }
 .nbtn.prime { background: var(--red); border-color: var(--red); color: var(--white); }
-.nbtn.prime:hover { background: #c9231a; border-color: #c9231a; }
+.nbtn.prime:hover { background: #c9231a; }
 
 .dots { display: flex; gap: 4px; align-items: center; }
-.dot { width: 4px; height: 4px; border-radius: 50%; background: var(--border2); cursor: pointer; transition: all 0.25s; }
+.dot { width: 4px; height: 4px; border-radius: 50%; background: var(--bdr2); cursor: pointer; transition: all 0.25s; }
 .dot.on { background: var(--red); width: 14px; border-radius: 2px; }
 
-/* ━━━ INFO SHEET ━━━ */
-.overlay {
-  position: fixed; inset: 0; z-index: 500;
-  background: rgba(0,0,0,0.97);
-  display: flex; align-items: flex-end;
-  opacity: 0; pointer-events: none;
-  transition: opacity 0.25s ease;
-}
+/* ── INFO SHEET ── */
+.overlay { position: fixed; inset: 0; z-index: 500; background: rgba(0,0,0,0.97); display: flex; align-items: flex-end; opacity: 0; pointer-events: none; transition: opacity 0.25s ease; }
 .overlay.open { opacity: 1; pointer-events: all; }
-.sheet {
-  background: var(--dark2);
-  border-top: 2px solid var(--red);
-  border-radius: 14px 14px 0 0;
-  width: 100%; max-height: 70vh; overflow-y: auto;
-  padding: 22px 18px 40px;
-  transform: translateY(20px);
-  transition: transform 0.28s ease;
-}
+.sheet { background: var(--dark2); border-top: 2px solid var(--red); border-radius: 14px 14px 0 0; width: 100%; max-height: 70vh; overflow-y: auto; padding: 20px 16px 40px; transform: translateY(20px); transition: transform 0.28s ease; }
 .overlay.open .sheet { transform: translateY(0); }
-.sh-handle { width: 28px; height: 2px; background: var(--border2); border-radius: 2px; margin: 0 auto 20px; }
+.sh-handle { width: 28px; height: 2px; background: var(--bdr2); border-radius: 2px; margin: 0 auto 18px; }
 .sh-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px; }
 .sh-type { font-size: 9px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 4px; }
 .sh-type.definition     { color: var(--white); }
 .sh-type.context        { color: var(--blue); }
 .sh-type.why-it-matters { color: var(--red); }
-.sh-term { font-size: 19px; font-weight: 900; color: var(--white); letter-spacing: -0.02em; line-height: 1.2; }
+.sh-term { font-size: 18px; font-weight: 900; letter-spacing: -0.02em; line-height: 1.2; }
 .xbtn { background: var(--border); border: none; border-radius: 2px; padding: 5px 10px; color: var(--grey); font-size: 9px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; flex-shrink: 0; }
-.xbtn:hover { background: var(--border2); }
 .sh-line { height: 1px; background: var(--border); margin: 12px 0; }
 .sh-body { font-size: 14px; line-height: 1.78; color: var(--grey); }
 
 /* ━━━ DESKTOP — side by side ━━━ */
 @media (min-width: 768px) {
+  .vid-toggle { display: none; } /* no toggle needed on desktop */
+
   .main { flex-direction: row; }
 
   .video-panel {
-    width: 55%;
-    flex-shrink: 0;
-    max-height: none;
-    aspect-ratio: unset;
-    border-bottom: none;
-    border-right: 1px solid var(--border);
-    /* Fill full height of main */
-    align-self: stretch;
+    width: 55%; flex-shrink: 0;
+    max-height: none !important; /* always visible on desktop */
+    border-bottom: none; border-right: 1px solid var(--border);
+    position: relative;
+    transition: none;
   }
-
-  .video-panel iframe,
-  .vid-placeholder { position: absolute; inset: 0; width: 100%; height: 100%; }
-  .video-panel { position: relative; }
-
+  .video-panel iframe { position: absolute; inset: 0; width: 100%; height: 100%; min-height: unset; }
   .cards-section { flex: 1; }
 }
 
-.card::-webkit-scrollbar,
-.sheet::-webkit-scrollbar { width: 2px; }
-.card::-webkit-scrollbar-thumb,
-.sheet::-webkit-scrollbar-thumb { background: var(--border2); }
+.card::-webkit-scrollbar, .sheet::-webkit-scrollbar { width: 2px; }
+.card::-webkit-scrollbar-thumb, .sheet::-webkit-scrollbar-thumb { background: var(--bdr2); }
 </style>
 </head>
 <body>
-
 <div class="app">
 
   <!-- Header -->
@@ -322,18 +234,17 @@ html, body {
         <span class="logo-fm">FM</span>
       </div>
       <div class="hdr-right">
-        <span class="tag">iTabs Slider · Iran</span>
+        <span class="tag">iTabs Slider</span>
+        <!-- Mobile: toggle video visibility -->
+        <button class="vid-toggle" id="vidToggle" onclick="toggleVideo()">▶ Video</button>
       </div>
     </div>
-    <div class="prog-rail">
-      <div class="prog-bar" id="pb" style="width:10%"></div>
-    </div>
+    <div class="prog-rail"><div class="prog-bar" id="pb" style="width:10%"></div></div>
   </div>
 
-  <!-- Main: video + cards -->
   <div class="main">
 
-    <!-- Video panel — loads immediately, native YT controls -->
+    <!-- Video panel — collapsed on mobile, always visible desktop -->
     <div class="video-panel" id="videoPanel">
       <iframe id="ytFrame"
         src="https://www.youtube.com/embed/qGpyXCopCYg?rel=0&modestbranding=1"
@@ -342,7 +253,7 @@ html, body {
       </iframe>
     </div>
 
-    <!-- Cards section -->
+    <!-- Cards -->
     <div class="cards-section">
       <div class="counter">
         <span id="cl">Insight 1 of 10</span>
@@ -377,211 +288,204 @@ html, body {
 
 <script>
 const VID_ID = "qGpyXCopCYg";
-// Jump to timestamp — user-initiated so autoplay is allowed by browsers
-function startVideo(sec) {
-  sec = sec || 0;
+let videoOpen = false;
+
+function toggleVideo() {
+  videoOpen = !videoOpen;
+  document.getElementById('videoPanel').classList.toggle('open', videoOpen);
+  document.getElementById('vidToggle').classList.toggle('active', videoOpen);
+  document.getElementById('vidToggle').textContent = videoOpen ? '✕ Hide' : '▶ Video';
+}
+
+function jumpTo(sec) {
+  // Open video panel on mobile if not already open
+  if (!videoOpen) {
+    videoOpen = true;
+    document.getElementById('videoPanel').classList.add('open');
+    document.getElementById('vidToggle').classList.add('active');
+    document.getElementById('vidToggle').textContent = '✕ Hide';
+  }
+  // Seek to timestamp — user-initiated click so autoplay is allowed
   document.getElementById('ytFrame').src =
     `https://www.youtube.com/embed/${VID_ID}?start=${sec}&autoplay=1&rel=0&modestbranding=1`;
 }
 
 const DATA = [
   {
-    topic: "Breaking News",
-    hl: "47 Years of Regime — <em>Ended in a Day</em>",
-    body: "On February 28th, 2026, the top leaders of Iran's Islamic regime were killed. After 47 years of brutal theocratic rule, a nation of 90 million people — with one of the richest civilizations in human history — stands uncaged. Nobody is ready for what happens next.",
-    ts: "0:00", sec: 0,
-    btns: [
-      { t:"context", term:"The Islamic Republic", txt:"The regime seized power after the 1979 revolution. For 47 years it ruled through repression, mass executions of dissidents, and the global sponsorship of terrorism — while suffocating Iran's enormous potential. It ended February 28th, 2026." },
-      { t:"why-it-matters", term:"Why this moment is historic", txt:"This isn't just a leadership change. It removes the single constraint holding back a country with extraordinary human capital, unmatched energy wealth, and 7,000 years of civilizational depth. Removing that constraint doesn't produce slow growth — it produces an eruption." }
+    topic:"Breaking News",
+    hl:"47 Years of Regime — <em>Ended in a Day</em>",
+    body:"On February 28th, 2026, the top leaders of Iran's Islamic regime were killed. After 47 years of brutal theocratic rule, a nation of 90 million people — with one of the richest civilizations in human history — stands uncaged. Nobody is ready for what happens next.",
+    ts:"0:00", sec:0,
+    btns:[
+      {t:"context",term:"The Islamic Republic",txt:"The regime seized power after the 1979 revolution. For 47 years it ruled through repression, mass executions of dissidents, and the global sponsorship of terrorism — while suffocating Iran's enormous potential. It ended February 28th, 2026."},
+      {t:"why-it-matters",term:"Why this moment is historic",txt:"This isn't just a leadership change. It removes the single constraint holding back a country with extraordinary human capital, unmatched energy wealth, and 7,000 years of civilizational depth. Removing that constraint doesn't produce slow growth — it produces an eruption."}
     ]
   },
   {
-    topic: "Civilizational Depth",
-    hl: "When Europe Was Farming, Persia Was <em>Building Empires</em>",
-    body: "Iran is one of the oldest continuous civilizations on Earth — 7,000 years of settlement. In 550 BC, Cyrus the Great built history's first superpower: 5.5 million km² from the Balkans to India. He created the first postal system, the first universal legal code, and one of history's first human rights declarations.",
-    ts: "2:02", sec: 122,
-    btns: [
-      { t:"definition", term:"The Cyrus Cylinder", txt:"A clay cylinder (~539 BC) in the British Museum, with a replica at the United Nations in New York. It declared freedom of worship, the right of deported peoples to return home, and that conquered peoples must be treated with dignity — 2,500 years ago. The UN literally keeps a copy in their building." },
-      { t:"context", term:"Persepolis", txt:"The ceremonial capital of the Achaemenid Empire. When Alexander the Great conquered it, even he was stunned by what he saw. The ruins still stand in southwestern Iran as a UNESCO World Heritage Site — columns, carvings, grand staircases that influenced Roman architecture centuries later." }
+    topic:"Civilizational Depth",
+    hl:"When Europe Was Farming, Persia Was <em>Building Empires</em>",
+    body:"Iran is one of the oldest continuous civilizations on Earth — 7,000 years of settlement. In 550 BC, Cyrus the Great built history's first superpower: 5.5 million km² from the Balkans to India. He created the first postal system, the first universal legal code, and one of history's first human rights declarations.",
+    ts:"2:02", sec:122,
+    btns:[
+      {t:"definition",term:"The Cyrus Cylinder",txt:"A clay cylinder (~539 BC) in the British Museum, with a replica at the United Nations in New York. It declared freedom of worship, the right of deported peoples to return home, and that conquered peoples must be treated with dignity — 2,500 years ago. The UN literally keeps a copy in their building."},
+      {t:"context",term:"Persepolis",txt:"The ceremonial capital of the Achaemenid Empire. When Alexander the Great conquered it, even he was stunned. The ruins still stand in southwestern Iran as a UNESCO World Heritage Site — columns, carvings, grand staircases that influenced Roman architecture centuries later."}
     ]
   },
   {
-    topic: "Science & Innovation",
-    hl: "The Word <em>'Algorithm'</em> Comes From a Persian Name",
-    body: "Al-Khwarizmi (780 AD) is called the father of algebra. 'Algebra' comes from his book Al-Jabr. 'Algorithm' — the foundation of every AI system, computer program, and piece of software ever built — is the Latinisation of his name. A Persian mathematician from the 8th century is hardwired into the entire digital age.",
-    ts: "5:09", sec: 309,
-    btns: [
-      { t:"definition", term:"Algorithm", txt:"Every AI model, software program, and computer system runs on algorithms. The word traces directly to 'Algoritmi' — the Latin form of Al-Khwarizmi's name. Persia's contribution to civilisation didn't stop with ancient empires. It's baked into the technology running the modern world right now." },
-      { t:"context", term:"Rumi outsells English poets in America", txt:"A 13th century Persian poet who wrote in Farsi 800 years ago. In 2026 he still outsells most English-language poets on Amazon in the United States. The cultural output of Persia has never stopped." },
-      { t:"context", term:"Avicenna's 600-year medical textbook", txt:"Persian polymath Ibn Sina wrote the Canon of Medicine — the medical textbook across Europe and the Islamic world for over 600 years. The entire modern hospital system traces to a Persian institution: the Academy of Gondishapur." }
+    topic:"Science & Innovation",
+    hl:"The Word <em>'Algorithm'</em> Comes From a Persian Name",
+    body:"Al-Khwarizmi (780 AD) is called the father of algebra. 'Algebra' comes from his book Al-Jabr. 'Algorithm' — the foundation of every AI system, computer program, and piece of software ever built — is the Latinisation of his name. A Persian mathematician from the 8th century is hardwired into the entire digital age.",
+    ts:"5:09", sec:309,
+    btns:[
+      {t:"definition",term:"Algorithm",txt:"Every AI model, software program, and computer system runs on algorithms. The word traces directly to 'Algoritmi' — the Latin form of Al-Khwarizmi's name. Persia's contribution to civilisation didn't stop with ancient empires. It's baked into the technology running the modern world right now."},
+      {t:"context",term:"Rumi outsells English poets in America",txt:"A 13th century Persian poet who wrote in Farsi 800 years ago. In 2026 he still outsells most English-language poets on Amazon in the United States. The cultural output of Persia has never stopped."},
+      {t:"context",term:"Avicenna's 600-year medical textbook",txt:"Persian polymath Ibn Sina wrote the Canon of Medicine — the medical textbook across Europe and the Islamic world for over 600 years. The entire modern hospital system traces to a Persian institution: the Academy of Gondishapur."}
     ]
   },
   {
-    topic: "Pre-Revolution Iran",
-    hl: "9–10% GDP Growth. <em>Then the Revolution Took It All.</em>",
-    body: "From 1963–1977, Iran's GDP grew at 9–10.5% per year — among the highest sustained rates anywhere in the developing world. Women had voting rights. Literacy jumped from 15% to 50%. Tehran was a genuinely modern metropolis. Then 1979 handed it to a theocracy.",
-    ts: "7:02", sec: 422,
-    btns: [
-      { t:"definition", term:"The White Revolution (1963)", txt:"The Shah's reform program: land redistribution to millions of peasants, women's suffrage, a literacy corps sending teachers to remote villages, and health corps that nearly eradicated malaria. For context — the US currently grows at ~3%. Iran sustained 9–10.5% for 14 years." },
-      { t:"context", term:"Why Iranians still revolted", txt:"Modernisation was top-down with no democracy after 1953. Oil wealth enriched elites while rural migrants flooded urban slums. Westernisation happened so fast it alienated millions of traditional Iranians who felt their country was losing its soul. The Shah's secret police (SAVAK) crushed all opposition." },
-      { t:"definition", term:"Operation Ajax (1953)", txt:"A CIA and MI6 covert operation that overthrew Iran's elected Prime Minister Mosaddegh after he nationalised British-controlled oil. Still one of the deepest sources of anti-Western resentment in the region — and the event that set the stage for 1979." }
+    topic:"Pre-Revolution Iran",
+    hl:"9–10% GDP Growth. <em>Then the Revolution Took It All.</em>",
+    body:"From 1963–1977, Iran's GDP grew at 9–10.5% per year — among the highest sustained rates anywhere in the developing world. Women had voting rights. Literacy jumped from 15% to 50%. Tehran was a genuinely modern metropolis. Then 1979 handed it to a theocracy.",
+    ts:"7:02", sec:422,
+    btns:[
+      {t:"definition",term:"The White Revolution (1963)",txt:"The Shah's reform program: land redistribution to millions of peasants, women's suffrage, a literacy corps sending teachers to remote villages, and health corps that nearly eradicated malaria. For context — the US currently grows at ~3%. Iran sustained 9–10.5% for 14 years."},
+      {t:"context",term:"Why Iranians still revolted",txt:"Modernisation was top-down with no democracy after 1953. Oil wealth enriched elites while rural migrants flooded urban slums. Westernisation happened so fast it alienated millions of traditional Iranians who felt their country was losing its soul. SAVAK crushed all opposition."},
+      {t:"definition",term:"Operation Ajax (1953)",txt:"A CIA and MI6 covert operation that overthrew Iran's elected Prime Minister Mosaddegh after he nationalised British-controlled oil. Still one of the deepest sources of anti-Western resentment in the region — and the event that set the stage for 1979."}
     ]
   },
   {
-    topic: "Human Capital",
-    hl: "98% Youth Literacy. <em>70% of Engineers Are Women.</em>",
-    body: "Iran has advanced-economy education statistics trapped inside a sanctioned regime. 42% of the population is under 25. It produces the 3rd most engineering graduates on Earth. And under one of the most repressive regimes for women's rights in history, 70% of those graduates are women.",
-    ts: "13:19", sec: 799,
-    btns: [
-      { t:"why-it-matters", term:"What 70% female engineers signals", txt:"Under one of the most repressive regimes for women's rights in the modern world, women dominated engineering faculties. That tells you everything about the drive and determination of the Iranian people — and the scale of untapped talent waiting to be released." },
-      { t:"context", term:"Sharif University — the MIT of Iran", txt:"Sharif graduates are all over Silicon Valley. Between 2013–2022, Iran produced 2,700 AI research papers — most of any Islamic nation — and ranked 17th globally in AI scientific output. While under sanctions. While cut off from the global technology stack." },
-      { t:"definition", term:"The $38 billion brain drain", txt:"The cumulative cost of brain drain to Iran exceeds $38 billion — roughly double Iran's entire annual oil export revenue. Before 1979, over 90% of Iranian students studying abroad returned home. Today, less than 10% return." }
+    topic:"Human Capital",
+    hl:"98% Youth Literacy. <em>70% of Engineers Are Women.</em>",
+    body:"Iran has advanced-economy education statistics trapped inside a sanctioned regime. 42% of the population is under 25. It produces the 3rd most engineering graduates on Earth. And under one of the most repressive regimes for women's rights in history, 70% of those graduates are women.",
+    ts:"13:19", sec:799,
+    btns:[
+      {t:"why-it-matters",term:"What 70% female engineers signals",txt:"Under one of the most repressive regimes for women's rights in the modern world, women dominated engineering faculties. That tells you everything about the drive and determination of the Iranian people — and the scale of untapped talent waiting to be released."},
+      {t:"context",term:"Sharif University — the MIT of Iran",txt:"Sharif graduates are all over Silicon Valley. Between 2013–2022, Iran produced 2,700 AI research papers — most of any Islamic nation — and ranked 17th globally in AI scientific output. While under sanctions. While cut off from the global technology stack."},
+      {t:"definition",term:"The $38 billion brain drain",txt:"The cumulative cost of brain drain to Iran exceeds $38 billion — roughly double Iran's entire annual oil export revenue. Before 1979, over 90% of Iranian students studying abroad returned home. Today, less than 10% return."}
     ]
   },
   {
-    topic: "The Diaspora",
-    hl: "The Iranians Who <em>Helped Build Silicon Valley</em>",
-    body: "Millions of Iranians who fled the revolution didn't just survive — they dominated. Dara Khosrowshahi runs Uber. Sasan Goodarzi runs Intuit. Pierre Omidyar founded eBay. Ali Ghodsi co-founded Databricks. Iranians backed Google, Dropbox, Uber, and Airbnb. A free Iran gives all of that a reason to go back.",
-    ts: "15:21", sec: 921,
-    btns: [
-      { t:"context", term:"Key Iranian-American founders", txt:"Dara Khosrowshahi (Uber CEO), Sasan Goodarzi (Intuit CEO — TurboTax, QuickBooks), Pierre Omidyar (eBay founder), Ali Ghodsi (Databricks, tens of billions valuation), Bobby Yazdani (early investor in Google, Dropbox, Uber), Ali and Hadi Partovi (backed Uber and Airbnb)." },
-      { t:"why-it-matters", term:"The reverse brain drain", txt:"A free Iran doesn't just unleash 90 million inside the country. It gives millions abroad a reason to invest back, advise, and return. People who spent careers at Google, Apple, Tesla, and Microsoft bringing all of that expertise home. The knowledge transfer alone would be staggering." }
+    topic:"The Diaspora",
+    hl:"The Iranians Who <em>Helped Build Silicon Valley</em>",
+    body:"Millions of Iranians who fled the revolution didn't just survive — they dominated. Dara Khosrowshahi runs Uber. Sasan Goodarzi runs Intuit. Pierre Omidyar founded eBay. Ali Ghodsi co-founded Databricks. Iranians backed Google, Dropbox, Uber, and Airbnb. A free Iran gives all of that a reason to go back.",
+    ts:"15:21", sec:921,
+    btns:[
+      {t:"context",term:"Key Iranian-American founders",txt:"Dara Khosrowshahi (Uber CEO), Sasan Goodarzi (Intuit CEO — TurboTax, QuickBooks), Pierre Omidyar (eBay founder), Ali Ghodsi (Databricks, tens of billions), Bobby Yazdani (early Google/Dropbox/Uber investor), Ali and Hadi Partovi (backed Uber and Airbnb)."},
+      {t:"why-it-matters",term:"The reverse brain drain",txt:"A free Iran doesn't just unleash 90 million inside the country. It gives millions abroad a reason to invest back, advise, and return. People who spent careers at Google, Apple, Tesla, and Microsoft bringing all of that expertise home. The knowledge transfer alone would be staggering."}
     ]
   },
   {
-    topic: "Historical Playbook",
-    hl: "South Korea. Singapore. Rwanda. <em>The Pattern Is Clear.</em>",
-    body: "South Korea went from $67 GDP per capita to a top-10 economy. Singapore went from fishing village to world's highest GDP per capita in one generation. Rwanda leapfrogged traditional banking entirely. Constraint removed + educated population + right bets = eruption. Every time.",
-    ts: "19:18", sec: 1158,
-    btns: [
-      { t:"context", term:"South Korea's miracle formula", txt:"Education investment, a diaspora sending capital and expertise back home, and a government that bet everything on tech-driven export growth. From $67 per capita after the Korean War to a top-10 economy today. Samsung, Hyundai, LG, SK Hynix — all Korean." },
-      { t:"context", term:"Dubai: sand to skyline in 50 years", txt:"Before the 1960s, Dubai was a fishing and pearl-diving port. Its rulers diversified into finance, tourism, and global logistics knowing oil was finite. Today less than 1% of Dubai's GDP comes from oil." },
-      { t:"why-it-matters", term:"What Iran has that they didn't", txt:"Iran has the full combination simultaneously: massive energy reserves, a highly educated young population, 7,000 years of civilisational history, AND a motivated global diaspora worth hundreds of billions. None of the comparison countries had all of these at once." }
+    topic:"Historical Playbook",
+    hl:"South Korea. Singapore. Rwanda. <em>The Pattern Is Clear.</em>",
+    body:"South Korea went from $67 GDP per capita to a top-10 economy. Singapore went from fishing village to world's highest GDP per capita in one generation. Rwanda leapfrogged traditional banking entirely. Constraint removed + educated population + right bets = eruption. Every time.",
+    ts:"19:18", sec:1158,
+    btns:[
+      {t:"context",term:"South Korea's miracle formula",txt:"Education investment, a diaspora sending capital and expertise back home, and a government that bet everything on tech-driven export growth. From $67 per capita after the Korean War to a top-10 economy today. Samsung, Hyundai, LG, SK Hynix — all Korean. Sound familiar?"},
+      {t:"context",term:"Dubai: sand to skyline in 50 years",txt:"Before the 1960s, Dubai was a fishing and pearl-diving port. Its rulers diversified into finance, tourism, and global logistics knowing oil was finite. Today less than 1% of Dubai's GDP comes from oil."},
+      {t:"why-it-matters",term:"What Iran has that they didn't",txt:"Iran has the full combination simultaneously: massive energy reserves, a highly educated young population, 7,000 years of civilisational history, AND a motivated global diaspora worth hundreds of billions. None of the comparison countries had all of these at once."}
     ]
   },
   {
-    topic: "Energy + AI",
-    hl: "2nd Largest Gas Reserves. <em>90% Cheaper Than the US.</em>",
-    body: "AI's #1 bottleneck is energy. Iran has the world's 2nd largest natural gas reserves — 17% of global supply. 3rd largest oil reserves. 90% of its land is suitable for solar. Electricity costs 0.6–1.5 cents/kWh vs 13–18 cents in the US. A game-changing cost advantage for AI data centres.",
-    ts: "22:23", sec: 1343,
-    btns: [
-      { t:"definition", term:"South Pars Gas Field", txt:"Located in the Persian Gulf, South Pars is the single largest natural gas field on Earth — holding approximately 8% of all global natural gas reserves by itself. Iran's total reserves are 17% of the entire planet's proven gas supply, second only to Russia." },
-      { t:"why-it-matters", term:"Why energy is now the AI constraint", txt:"Every major AI company — xAI, Google, Microsoft, OpenAI, Anthropic, Meta — is scrambling to secure energy. The IEA expects global data centre electricity demand to more than double by 2030. Microsoft is literally reviving Three Mile Island nuclear plant." },
-      { t:"definition", term:"The data centre opportunity", txt:"A single large AI data centre consumes 100+ megawatts. Iran has energy resources to power dozens simultaneously. A 500 MW campus in Iran could save hundreds of millions annually on electricity vs Virginia, Texas, or California." }
+    topic:"Energy + AI",
+    hl:"2nd Largest Gas Reserves. <em>90% Cheaper Than the US.</em>",
+    body:"AI's #1 bottleneck is energy. Iran has the world's 2nd largest natural gas reserves — 17% of global supply. 3rd largest oil reserves. 90% of its land is suitable for solar. Electricity costs 0.6–1.5 cents/kWh vs 13–18 cents in the US. A game-changing cost advantage for AI data centres.",
+    ts:"22:23", sec:1343,
+    btns:[
+      {t:"definition",term:"South Pars Gas Field",txt:"Located in the Persian Gulf, South Pars is the single largest natural gas field on Earth — holding approximately 8% of all global natural gas reserves by itself. Iran's total reserves are 17% of the entire planet's proven gas supply, second only to Russia."},
+      {t:"why-it-matters",term:"Why energy is now the AI constraint",txt:"Every major AI company — xAI, Google, Microsoft, OpenAI, Anthropic, Meta — is scrambling to secure energy. The IEA expects global data centre electricity demand to more than double by 2030. Microsoft is literally reviving Three Mile Island nuclear plant."},
+      {t:"definition",term:"The data centre opportunity",txt:"A single large AI data centre consumes 100+ megawatts. Iran has energy resources to power dozens simultaneously. A 500 MW campus in Iran could save hundreds of millions annually on electricity vs Virginia, Texas, or California."}
     ]
   },
   {
-    topic: "Technology Leapfrog",
-    hl: "A 22-Year-Old in Tehran Can <em>Compete Globally — Day One</em>",
-    body: "With Claude, Grok, and an internet connection, an Iranian founder can build a globally competitive software company with no VC and no Silicon Valley address. Iran enters freedom in the AI era — not the pre-smartphone era. 80% of the population already uses VPNs. They know what's out there.",
-    ts: "33:00", sec: 1980,
-    btns: [
-      { t:"context", term:"Kenya's M-Pesa leapfrog", txt:"Kenya leapfrogged traditional banking entirely with M-Pesa mobile payments. Today mobile money represents a huge share of GDP. Iran has the same opportunity with AI — Farzad says it's 10–100x bigger than M-Pesa." },
-      { t:"definition", term:"Iran's existing startup ecosystem", txt:"Despite everything: 3,700+ startups in Iran (2025), $676M raised, 45 science and technology parks, 600 innovation centres, 259 fintech startups alone. Built under sanctions. Now remove the constraints." },
-      { t:"why-it-matters", term:"The VPN generation is ready now", txt:"80% of Iran's population already uses VPNs to access the open internet. They've been watching the world develop AI for years. When the cage opens, they don't need to be taught — they've been preparing." }
+    topic:"Technology Leapfrog",
+    hl:"A 22-Year-Old in Tehran Can <em>Compete Globally — Day One</em>",
+    body:"With Claude, Grok, and an internet connection, an Iranian founder can build a globally competitive software company with no VC and no Silicon Valley address. Iran enters freedom in the AI era — not the pre-smartphone era. 80% of the population already uses VPNs. They know what's out there.",
+    ts:"33:00", sec:1980,
+    btns:[
+      {t:"context",term:"Kenya's M-Pesa leapfrog",txt:"Kenya leapfrogged traditional banking entirely with M-Pesa mobile payments. Today mobile money represents a huge share of GDP. Iran has the same opportunity with AI — Farzad says it's 10–100x bigger than M-Pesa."},
+      {t:"definition",term:"Iran's existing startup ecosystem",txt:"Despite everything: 3,700+ startups in Iran (2025), $676M raised, 45 science and technology parks, 600 innovation centres, 259 fintech startups alone. Built under sanctions. Now remove the constraints."},
+      {t:"why-it-matters",term:"The VPN generation is ready now",txt:"80% of Iran's population already uses VPNs to access the open internet. They've been watching the world develop AI for years. When the cage opens, they don't need to be taught — they've been preparing."}
     ]
   },
   {
-    topic: "Farzad's Prediction",
-    hl: "Top-10 Global Economy. <em>25 Years.</em>",
-    body: "Wave 1: Sanctions relief → double-digit GDP immediately (12.5% in 2016 just from partial relief). Wave 2: Diaspora capital and expertise floods back. Wave 3: AI leapfrog — decades skipped overnight. Farzad on record: top-20 economy in 15 years, top-10 in 25.",
-    ts: "36:33", sec: 2193,
-    btns: [
-      { t:"definition", term:"The 2016 proof of concept", txt:"When sanctions were temporarily lifted under the nuclear deal, Iran's GDP grew 12.5% in a single year — its only double-digit growth in decades. That was with the regime still in power and zero AI. Imagine full sanctions relief, democratic governance, diaspora return, and the AI tailwind all hitting simultaneously." },
-      { t:"context", term:"The honest bear case", txt:"Farzad addresses Libya (collapsed into militia chaos), Iraq (gave rise to ISIS), Syria (decade of civil war). He argues Iran is categorically different: 90M educated people, a massive globally connected diaspora, extraordinary civil society — and it's 2026, not 2003." },
-      { t:"why-it-matters", term:"The core thesis", txt:"When a system has all the ingredients for explosive growth but is held back by a single constraint, removing that constraint doesn't produce slow improvement — it erupts. The people who invented algebra, wrote the first declaration of human rights, and built the world's first university hospital are still there. 90 million of them. Young, educated, and now hopefully free." }
+    topic:"Farzad's Prediction",
+    hl:"Top-10 Global Economy. <em>25 Years.</em>",
+    body:"Wave 1: Sanctions relief → double-digit GDP immediately (12.5% in 2016 from partial relief alone). Wave 2: Diaspora capital and expertise floods back. Wave 3: AI leapfrog — decades skipped overnight. Farzad on record: top-20 economy in 15 years, top-10 in 25.",
+    ts:"36:33", sec:2193,
+    btns:[
+      {t:"definition",term:"The 2016 proof of concept",txt:"When sanctions were temporarily lifted under the nuclear deal, Iran's GDP grew 12.5% in a single year — its only double-digit growth in decades. That was with the regime still in power and zero AI. Imagine full sanctions relief, democratic governance, diaspora return, and the AI tailwind all hitting simultaneously."},
+      {t:"context",term:"The honest bear case",txt:"Farzad addresses Libya (collapsed into militia chaos), Iraq (gave rise to ISIS), Syria (decade of civil war). He argues Iran is categorically different: 90M educated people, a massive globally connected diaspora, extraordinary civil society — and it's 2026, not 2003."},
+      {t:"why-it-matters",term:"The core thesis",txt:"When a system has all the ingredients for explosive growth but is held back by a single constraint, removing that constraint doesn't produce slow improvement — it erupts. The people who invented algebra, wrote the first declaration of human rights, and built the world's first university hospital are still there. 90 million of them. Young, educated, and now hopefully free."}
     ]
   }
 ];
 
-let cur = 0, anim = false;
+let cur=0, anim=false;
+function esc(s){return(s||'').replace(/'/g,"\\'").replace(/\n/g,' ');}
+function tl(t){return{definition:'Definition',context:'Context','why-it-matters':'Why It Matters'}[t]||t;}
 
-function esc(s) { return (s||'').replace(/'/g, "\\'").replace(/\n/g, ' '); }
-function tl(t)  { return { definition:'Definition', context:'Context', 'why-it-matters':'Why It Matters' }[t] || t; }
-
-function build() {
-  const vp = document.getElementById('vp');
-  DATA.forEach((c, i) => {
-    const w = document.createElement('div');
-    w.className = 'cw' + (i===0 ? ' active' : '');
-    w.id = 'cw' + i;
-    const bh = c.btns.map(b =>
-      `<button class="ibtn ${b.t}" onclick="openX('${b.t}','${esc(b.term)}','${esc(b.txt)}')"><span class="ibadge">i</span>${b.term||tl(b.t)}</button>`
-    ).join('');
-    w.innerHTML = `
-      <div class="card">
-        <div class="card-eye">
-          <span class="eye-n">INSIGHT ${i+1}/${DATA.length}</span>
-          <span class="eye-sep">·</span>
-          <span class="eye-topic">${c.topic}</span>
-        </div>
-        <h2 class="card-hl">${c.hl}</h2>
-        <p class="card-body">${c.body}</p>
-        <button class="ts-btn" onclick="startVideo(${c.sec})">
-          <span class="ts-pip">●</span> ▶ Jump to ${c.ts}
-        </button>
-        <div class="irow">${bh}</div>
-      </div>`;
+function build(){
+  const vp=document.getElementById('vp');
+  DATA.forEach((c,i)=>{
+    const w=document.createElement('div');
+    w.className='cw'+(i===0?' active':''); w.id='cw'+i;
+    const bh=c.btns.map(b=>`<button class="ibtn ${b.t}" onclick="openX('${b.t}','${esc(b.term)}','${esc(b.txt)}')"><span class="ibadge">i</span>${b.term||tl(b.t)}</button>`).join('');
+    w.innerHTML=`<div class="card">
+      <div class="card-eye"><span class="eye-n">INSIGHT ${i+1}/${DATA.length}</span><span class="eye-sep">·</span><span class="eye-topic">${c.topic}</span></div>
+      <h2 class="card-hl">${c.hl}</h2>
+      <p class="card-body">${c.body}</p>
+      <button class="ts-btn" onclick="jumpTo(${c.sec})"><span class="ts-pip">●</span> ▶ Jump to ${c.ts}</button>
+      <div class="irow">${bh}</div>
+    </div>`;
     vp.appendChild(w);
   });
-
-  const dc = document.getElementById('dc');
-  DATA.forEach((_, i) => {
-    const d = document.createElement('div');
-    d.className = 'dot' + (i===0 ? ' on' : '');
-    d.onclick = () => goTo(i);
-    dc.appendChild(d);
-  });
+  const dc=document.getElementById('dc');
+  DATA.forEach((_,i)=>{const d=document.createElement('div');d.className='dot'+(i===0?' on':'');d.onclick=()=>goTo(i);dc.appendChild(d);});
   ui();
 }
 
-function go(d) { goTo(cur + d); }
-function goTo(idx) {
-  if (anim || idx < 0 || idx >= DATA.length || idx === cur) return;
-  anim = true;
+function go(d){goTo(cur+d);}
+function goTo(idx){
+  if(anim||idx<0||idx>=DATA.length||idx===cur)return;
+  anim=true;
   document.getElementById('cw'+cur).classList.add('out');
-  setTimeout(() => {
+  setTimeout(()=>{
     document.getElementById('cw'+cur).classList.remove('active','out');
-    cur = idx;
+    cur=idx;
     document.getElementById('cw'+cur).classList.add('active');
-    ui(); anim = false;
-  }, 265);
+    ui(); anim=false;
+  },265);
 }
-
-function ui() {
-  const p = Math.round(((cur+1)/DATA.length)*100);
-  document.getElementById('pb').style.width = p+'%';
-  document.getElementById('cl').textContent = `Insight ${cur+1} of ${DATA.length}`;
-  document.getElementById('cp').textContent = p+'%';
-  document.getElementById('prevB').disabled = cur===0;
-  document.getElementById('nextB').disabled = cur===DATA.length-1;
-  document.querySelectorAll('.dot').forEach((d,i) => d.classList.toggle('on', i===cur));
+function ui(){
+  const p=Math.round(((cur+1)/DATA.length)*100);
+  document.getElementById('pb').style.width=p+'%';
+  document.getElementById('cl').textContent=`Insight ${cur+1} of ${DATA.length}`;
+  document.getElementById('cp').textContent=p+'%';
+  document.getElementById('prevB').disabled=cur===0;
+  document.getElementById('nextB').disabled=cur===DATA.length-1;
+  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('on',i===cur));
 }
-
-function openX(type, term, txt) {
-  const L = { definition:'— Definition', context:'— Context', 'why-it-matters':'— Why It Matters' };
-  document.getElementById('st').textContent = (L[type]||type).toUpperCase();
-  document.getElementById('st').className = 'sh-type ' + type;
-  document.getElementById('sm').textContent = term || tl(type);
-  document.getElementById('sb').textContent = txt;
+function openX(type,term,txt){
+  const L={definition:'— Definition',context:'— Context','why-it-matters':'— Why It Matters'};
+  document.getElementById('st').textContent=(L[type]||type).toUpperCase();
+  document.getElementById('st').className='sh-type '+type;
+  document.getElementById('sm').textContent=term||tl(type);
+  document.getElementById('sb').textContent=txt;
   document.getElementById('ov').classList.add('open');
 }
-function closeX()  { document.getElementById('ov').classList.remove('open'); }
-function maybeX(e) { if (e.target === document.getElementById('ov')) closeX(); }
+function closeX(){document.getElementById('ov').classList.remove('open');}
+function maybeX(e){if(e.target===document.getElementById('ov'))closeX();}
 
-// Swipe on card area
-let tx=0, ty=0;
-document.getElementById('vp').addEventListener('touchstart', e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:true});
-document.getElementById('vp').addEventListener('touchend', e=>{
-  const dx=e.changedTouches[0].clientX-tx, dy=e.changedTouches[0].clientY-ty;
-  if(Math.abs(dx)>Math.abs(dy)&&Math.abs(dx)>40) go(dx<0?1:-1);
+let tx=0,ty=0;
+document.getElementById('vp').addEventListener('touchstart',e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:true});
+document.getElementById('vp').addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;
+  if(Math.abs(dx)>Math.abs(dy)&&Math.abs(dx)>40)go(dx<0?1:-1);
 },{passive:true});
-
-// Keyboard
-document.addEventListener('keydown', e=>{
+document.addEventListener('keydown',e=>{
   if(document.getElementById('ov').classList.contains('open')){if(e.key==='Escape')closeX();return;}
-  if(e.key==='ArrowRight'||e.key==='ArrowDown') go(1);
-  if(e.key==='ArrowLeft'||e.key==='ArrowUp')   go(-1);
+  if(e.key==='ArrowRight'||e.key==='ArrowDown')go(1);
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp')go(-1);
 });
 
 build();
