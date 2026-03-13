@@ -107,33 +107,6 @@ html, body {
   border: none; display: block;
 }
 
-/* Placeholder shown before user hits play */
-.vid-placeholder {
-  position: absolute; inset: 0;
-  background: #050505;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  gap: 10px; cursor: pointer;
-  transition: background 0.2s;
-}
-.vid-placeholder:hover { background: #0a0a0a; }
-.vid-placeholder.hidden { display: none; }
-
-.play-circle {
-  width: 52px; height: 52px;
-  border-radius: 50%;
-  background: var(--red);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 20px;
-  transition: transform 0.2s;
-}
-.vid-placeholder:hover .play-circle { transform: scale(1.08); }
-
-.play-label {
-  font-size: 11px; font-weight: 800;
-  letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--grey2);
-}
 
 /* ━━━ CARDS SECTION ━━━ */
 .cards-section {
@@ -360,15 +333,10 @@ html, body {
   <!-- Main: video + cards -->
   <div class="main">
 
-    <!-- Video panel -->
+    <!-- Video panel — loads immediately, native YT controls -->
     <div class="video-panel" id="videoPanel">
-      <!-- Placeholder shown until first play -->
-      <div class="vid-placeholder" id="placeholder" onclick="startVideo()">
-        <div class="play-circle">▶</div>
-        <div class="play-label">Play Farzad's Iran Video</div>
-      </div>
       <iframe id="ytFrame"
-        src=""
+        src="https://www.youtube.com/embed/qGpyXCopCYg?rel=0&modestbranding=1"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen>
       </iframe>
@@ -409,22 +377,11 @@ html, body {
 
 <script>
 const VID_ID = "qGpyXCopCYg";
-let videoLoaded = false;
-
-// Load video — either fresh start or seek to timestamp
+// Jump to timestamp — user-initiated so autoplay is allowed by browsers
 function startVideo(sec) {
   sec = sec || 0;
-  if (!videoLoaded) {
-    // First load — initialise the player with autoplay
-    const src = `https://www.youtube.com/embed/${VID_ID}?start=${sec}&autoplay=1&rel=0&modestbranding=1&enablejsapi=1`;
-    document.getElementById('ytFrame').src = src;
-    document.getElementById('placeholder').classList.add('hidden');
-    videoLoaded = true;
-  } else {
-    // Already loaded — reload at new timestamp (simplest cross-browser seek)
-    const src = `https://www.youtube.com/embed/${VID_ID}?start=${sec}&autoplay=1&rel=0&modestbranding=1&enablejsapi=1`;
-    document.getElementById('ytFrame').src = src;
-  }
+  document.getElementById('ytFrame').src =
+    `https://www.youtube.com/embed/${VID_ID}?start=${sec}&autoplay=1&rel=0&modestbranding=1`;
 }
 
 const DATA = [
